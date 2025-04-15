@@ -1,0 +1,12 @@
+# python
+__pycache__/
+*.pyc
+
+# env
+.env
+
+# migrations
+migrations/
+
+# alembic
+alembic.ini
