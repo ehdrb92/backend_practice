@@ -1,18 +1,28 @@
-from fastapi import APIRouter, Depends
-from sqlmodel import Session
+from fastapi import APIRouter, Depends, status
+from dependency_injector.wiring import inject, Provide
 
-from database import get_session
-from repositories.member import MemberRepository
-from schemas.member import CreateMemberRequest, CreateMemberResponse
-from utils.core import to_dict
+from schemas.member import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse
+from containers import Container
+from services.member import MemberService
 
 router = APIRouter(prefix="/api/v1", tags=["members"])
 
 
-@router.post("/member", response_model=CreateMemberResponse)
-async def create_member(create_member_request: CreateMemberRequest, session: Session = Depends(get_session)):
-    member_repository = MemberRepository()
-    new_member = member_repository.create_member(session, create_member_request)
-    session.commit()
-    session.refresh(new_member)
-    return CreateMemberResponse(**to_dict(new_member))
+@router.post("/member/join", response_model=JoinMemberResponse, status_code=status.HTTP_201_CREATED)
+@inject
+async def join(
+    join_member_request: JoinMemberRequest,
+    member_service: MemberService = Depends(Provide[Container.member_service]),
+):
+    member = await member_service.join(join_member_request)
+    return member
+
+
+@router.post("/member/login", response_model=LoginMemberResponse, status_code=status.HTTP_200_OK)
+@inject
+async def login(
+    login_member_request: LoginMemberRequest,
+    member_service: MemberService = Depends(Provide[Container.member_service]),
+):
+    member = await member_service.login(login_member_request)
+    return member
