@@ -1,7 +1,11 @@
 from fastapi import FastAPI
 import uvicorn
 
+from routers.member import router as member_router
+
 app = FastAPI(debug=True, title="Backend Practice", docs_url="/api/docs", redoc_url="/api/redoc")
+
+app.include_router(member_router)
 
 
 @app.get("/api")

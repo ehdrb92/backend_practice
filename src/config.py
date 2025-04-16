@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     POSTGRESQL_USER: str
     POSTGRESQL_PASSWORD: str
     POSTGRESQL_DB: str
+    POSTGRESQL_HOST: str
+    POSTGRESQL_PORT: int
 
     class Config:
         env_file = ".env"
