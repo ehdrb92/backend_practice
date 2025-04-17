@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 import uvicorn
 
-from routers.member import router as member_router
+from member.controller import router as member_router
 from containers import Container
 
 app = FastAPI(debug=True, title="Backend Practice", docs_url="/api/docs", redoc_url="/api/redoc")
 
 # IoC 컨테이너 설정
-app.container = Container()
+container = Container()
+container.wire(packages=["member"])
+app.container = container
 
 # 라우터
 app.include_router(member_router)

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from models.member import Member
-from schemas.member import JoinMemberRequest
+from member.model import Member
+from member.schemas import JoinMemberRequest
 
 
 class MemberRepository:

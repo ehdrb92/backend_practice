@@ -1,12 +1,12 @@
 from dependency_injector import containers, providers
 
 from utils.hash_handler import HashHandler
-from repositories.member import MemberRepository
-from services.member import MemberService
+from member.repository import MemberRepository
+from member.service import MemberService
 
 
 class Container(containers.DeclarativeContainer):
-    wire_config = containers.WiringConfiguration(packages=["routers"])
+    wire_config = containers.WiringConfiguration(packages=["member"])
 
     hash_handler = providers.Singleton(HashHandler)
 

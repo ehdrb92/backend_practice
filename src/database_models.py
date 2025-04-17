@@ -1,1 +1,1 @@
-import models.member
+import member.model

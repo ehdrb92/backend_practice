@@ -1,9 +1,8 @@
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session
 
-from repositories.member import MemberRepository
+from member.repository import MemberRepository
 from utils.hash_handler import HashHandler
-from schemas.member import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse
+from member.schemas import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse
 from utils.core import to_dict
 from database import create_session
 

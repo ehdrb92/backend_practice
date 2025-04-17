@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 from dependency_injector.wiring import inject, Provide
 
-from schemas.member import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse
+from member.schemas import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse
 from containers import Container
-from services.member import MemberService
+from member.service import MemberService
 
 router = APIRouter(prefix="/api/v1", tags=["members"])
 
