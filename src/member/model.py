@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, LargeBinary
+from sqlalchemy import Column, Integer, String, LargeBinary, Enum
 
 from database import Base
+from enums.member_role import MemberRole
 
 
 class Member(Base):
@@ -11,3 +12,4 @@ class Member(Base):
     password = Column(LargeBinary, nullable=False)
     address = Column(String(255), nullable=False)
     name = Column(String(30), nullable=False)
+    role = Column(Enum(MemberRole), nullable=False)
