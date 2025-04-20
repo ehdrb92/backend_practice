@@ -12,3 +12,6 @@ class MemberRepository:
 
     def get_member_by_email(self, session: Session, email: str):
         return session.query(Member).filter(Member.email == email).first()
+
+    def get_member_by_id(self, session: Session, member_id: int):
+        return session.query(Member).filter(Member.id == member_id).first()

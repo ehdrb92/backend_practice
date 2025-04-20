@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from dependency_injector.wiring import inject, Provide
 
-from member.schemas import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse
+from member.schemas import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse, GetMemberResponse
 from containers import Container
 from member.service import MemberService
 
@@ -25,4 +25,14 @@ async def login(
     member_service: MemberService = Depends(Provide[Container.member_service]),
 ):
     member = await member_service.login(login_member_request)
+    return member
+
+
+@router.get("/member/{member_id}", response_model=GetMemberResponse, status_code=status.HTTP_200_OK)
+@inject
+async def get_member(
+    member_id: int,
+    member_service: MemberService = Depends(Provide[Container.member_service]),
+):
+    member = await member_service.get_member(member_id)
     return member
