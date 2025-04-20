@@ -1,8 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 import uvicorn
 
 from member.controller import router as member_router
 from containers import Container
+from exceptions import validation_exception_handler, http_exception_handler, internal_server_error_handler
 
 app = FastAPI(debug=True, title="Backend Practice", docs_url="/api/docs", redoc_url="/api/redoc")
 
@@ -14,10 +17,15 @@ app.container = container
 # 라우터
 app.include_router(member_router)
 
+# 예외 처리 핸들러
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(Exception, internal_server_error_handler)
+
 
 @app.get("/api/v1/health")
 async def health():
-    return {"message": "ok"}
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "ok"})
 
 
 if __name__ == "__main__":
