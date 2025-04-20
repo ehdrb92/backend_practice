@@ -1,7 +1,11 @@
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, status
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from dependency_injector.wiring import inject, Provide
 
-from member.schemas import JoinMemberRequest, JoinMemberResponse, LoginMemberRequest, LoginMemberResponse, GetMemberResponse
+from member.schemas import JoinMemberRequest, JoinMemberResponse, GetMemberResponse
 from containers import Container
 from member.service import MemberService
 
@@ -14,18 +18,17 @@ async def join(
     join_member_request: JoinMemberRequest,
     member_service: MemberService = Depends(Provide[Container.member_service]),
 ):
-    member = await member_service.join(join_member_request)
-    return member
+    return await member_service.join(join_member_request)
 
 
-@router.post("/member/login", response_model=LoginMemberResponse, status_code=status.HTTP_200_OK)
+@router.post("/member/login", response_model=str, status_code=status.HTTP_200_OK)
 @inject
 async def login(
-    login_member_request: LoginMemberRequest,
+    oauth2_request: Annotated[OAuth2PasswordRequestForm, Depends()],
     member_service: MemberService = Depends(Provide[Container.member_service]),
 ):
-    member = await member_service.login(login_member_request)
-    return member
+    access_token = await member_service.login(oauth2_request.username, oauth2_request.password)
+    return JSONResponse(content={"access_token": access_token}, status_code=status.HTTP_200_OK)
 
 
 @router.get("/member/{member_id}", response_model=GetMemberResponse, status_code=status.HTTP_200_OK)
