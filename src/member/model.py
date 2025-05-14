@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, LargeBinary, Enum
 
-from database import Base
-from enums.member_role import MemberRole
+from src.database import Base
+from src.enums.member_role import MemberRole
 
 
 class Member(Base):

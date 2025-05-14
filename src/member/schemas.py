@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from enums.member_role import MemberRole
+from src.enums.member_role import MemberRole
 
 
 class JoinMemberRequest(BaseModel):

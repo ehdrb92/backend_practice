@@ -1,8 +1,8 @@
 from dependency_injector import containers, providers
 
-from utils.auth_handler import AuthHandler
-from member.repository import MemberRepository
-from member.service import MemberService
+from src.utils.auth_handler import AuthHandler
+from src.member.repository import MemberRepository
+from src.member.service import MemberService
 
 
 class Container(containers.DeclarativeContainer):
@@ -11,4 +11,6 @@ class Container(containers.DeclarativeContainer):
     auth_handler = providers.Singleton(AuthHandler)
 
     member_repository = providers.Singleton(MemberRepository)
-    member_service = providers.Singleton(MemberService, member_repository=member_repository, auth_handler=auth_handler)
+    member_service = providers.Singleton(
+        MemberService, member_repository=member_repository, auth_handler=auth_handler
+    )

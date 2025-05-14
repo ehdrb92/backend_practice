@@ -3,11 +3,17 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 import uvicorn
 
-from member.controller import router as member_router
-from containers import Container
-from exceptions import validation_exception_handler, http_exception_handler, internal_server_error_handler
+from src.member.controller import router as member_router
+from src.containers import Container
+from src.exceptions import (
+    validation_exception_handler,
+    http_exception_handler,
+    internal_server_error_handler,
+)
 
-app = FastAPI(debug=True, title="Backend Practice", docs_url="/api/docs", redoc_url="/api/redoc")
+app = FastAPI(
+    debug=True, title="Backend Practice", docs_url="/api/docs", redoc_url="/api/redoc"
+)
 
 # IoC 컨테이너 설정
 container = Container()

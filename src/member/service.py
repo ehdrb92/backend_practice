@@ -1,9 +1,10 @@
 from fastapi import HTTPException, status
-from member.repository import MemberRepository
-from utils.auth_handler import AuthHandler
-from member.schemas import JoinMemberRequest, JoinMemberResponse, GetMemberResponse
-from utils.core import to_dict
-from database import create_session
+
+from src.member.repository import MemberRepository
+from src.utils.auth_handler import AuthHandler
+from src.member.schemas import JoinMemberRequest, JoinMemberResponse, GetMemberResponse
+from src.utils.core import to_dict
+from src.database import create_session
 
 
 class MemberService:
@@ -28,10 +29,18 @@ class MemberService:
         try:
             member = self.member_repository.get_member_by_email(session, email)
             if not member:
-                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="인증에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.")
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="인증에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.",
+                )
             if not self.auth_handler.check_password(password, member.password):
-                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="인증에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.")
-            access_token = self.auth_handler.create_access_token(payload={"sub": member.email})
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="인증에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.",
+                )
+            access_token = self.auth_handler.create_access_token(
+                payload={"sub": member.email}
+            )
             return access_token
         finally:
             session.close()
