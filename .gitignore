@@ -12,3 +12,6 @@ migrations/
 
 # poetry
 poetry.lock
+
+# vscode
+.vscode/

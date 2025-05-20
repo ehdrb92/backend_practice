@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.enums.member_role import MemberRole
+from src.member.enums import MemberRole
 
 
 class JoinMemberRequest(BaseModel):
@@ -23,6 +23,16 @@ class GetMemberResponse(BaseModel):
     """회원 조회 응답 스키마"""
 
     id: int
+    email: str
+    address: str
+    name: str
+    role: MemberRole
+
+
+class UpdateMemberRequest(BaseModel):
+    """회원 수정 요청 스키마"""
+
+    id: int | None = None
     email: str
     address: str
     name: str

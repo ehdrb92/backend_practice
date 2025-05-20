@@ -1,1 +1,1 @@
-from src.member.model import Member
+from src.member.models import Member

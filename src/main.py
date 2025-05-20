@@ -3,21 +3,26 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 import uvicorn
 
-from src.member.controller import router as member_router
+from src.member.router import router as member_router
 from src.containers import Container
 from src.exceptions import (
     validation_exception_handler,
     http_exception_handler,
     internal_server_error_handler,
 )
+from src.middlewares import get_middleware
 
 app = FastAPI(
-    debug=True, title="Backend Practice", docs_url="/api/docs", redoc_url="/api/redoc"
+    debug=True,
+    title="Backend Practice",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    middleware=get_middleware(),
 )
 
 # IoC 컨테이너 설정
 container = Container()
-container.wire(packages=["member"])
+container.wire(packages=["src.member"])
 app.container = container
 
 # 라우터
