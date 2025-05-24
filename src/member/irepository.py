@@ -17,7 +17,7 @@ class IMemberRepository(ABC):
         pass
 
     @abstractmethod
-    async def find_by_id(self, session: AsyncSession, id: int) -> Member:
+    async def find_by_id(self, session: AsyncSession, id: str) -> Member:
         pass
 
     @abstractmethod
@@ -29,5 +29,5 @@ class IMemberRepository(ABC):
         pass
 
     @abstractmethod
-    async def delete(self, session: AsyncSession, id: int) -> None:
+    async def delete(self, session: AsyncSession, id: str) -> None:
         pass

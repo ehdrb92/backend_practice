@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 import uuid
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from fastapi import HTTPException, status
 
 from src.config import get_settings
 

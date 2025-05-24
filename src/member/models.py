@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy import Column, String, Enum
 
 from src.database import Base
 from src.member.enums import MemberRole
@@ -18,7 +18,7 @@ class Member(Base):
 
     __tablename__ = "member"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(String(36), primary_key=True)  # UUID
     email = Column(String(255), unique=True, index=True, nullable=False)
     password = Column(String(255), nullable=False)
     address = Column(String(255), nullable=False)

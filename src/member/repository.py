@@ -12,6 +12,7 @@ class MemberRepository(IMemberRepository):
     async def save(self, session: AsyncSession, member: JoinMemberRequest) -> Member:
         try:
             member = Member(
+                id=member.id,
                 email=member.email,
                 password=member.password,
                 address=member.address,
@@ -34,9 +35,9 @@ class MemberRepository(IMemberRepository):
             print(f"[MemberRepository.find_by_email] 에러가 발생했습니다: {str(e)}")
             raise e
 
-    async def find_by_id(self, session: AsyncSession, member_id: int) -> Member:
+    async def find_by_id(self, session: AsyncSession, id: str) -> Member:
         try:
-            query = await session.execute(select(Member).filter(Member.id == member_id))
+            query = await session.execute(select(Member).filter(Member.id == id))
             return query.scalar_one_or_none()
         except Exception as e:
             print(f"[MemberRepository.find_by_id] 에러가 발생했습니다: {str(e)}")
@@ -64,9 +65,9 @@ class MemberRepository(IMemberRepository):
             print(f"[MemberRepository.update] 에러가 발생했습니다: {str(e)}")
             raise e
 
-    async def delete(self, session: AsyncSession, member_id: int) -> None:
+    async def delete(self, session: AsyncSession, id: str) -> None:
         try:
-            await session.execute(delete(Member).filter(Member.id == member_id))
+            await session.execute(delete(Member).filter(Member.id == id))
         except Exception as e:
             print(f"[MemberRepository.delete] 에러가 발생했습니다: {str(e)}")
             raise e

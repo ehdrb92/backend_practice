@@ -5,7 +5,7 @@ import uvicorn
 
 from src.member.router import router as member_router
 from src.containers import Container
-from src.exceptions import (
+from src.exception_handler import (
     validation_exception_handler,
     http_exception_handler,
     internal_server_error_handler,
@@ -40,4 +40,4 @@ async def health():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app=app, host="0.0.0.0", port=8000)
+    uvicorn.run(app=app, host="0.0.0.0", port=8000, workers=1)
