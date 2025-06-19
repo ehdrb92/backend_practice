@@ -1,16 +1,31 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 import uvicorn
 
-from src.member.router import router as member_router
-from src.containers import Container
-from src.exception_handler import (
+from member.router.member import router as member_router
+from post.router.post import router as post_router
+from containers import Container
+from exception_handler import (
     validation_exception_handler,
     http_exception_handler,
     internal_server_error_handler,
 )
-from src.middlewares import get_middleware
+from middlewares import get_middleware
+from database import engine, Base
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # 데이터베이스 테이블 생성
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+    # 데이터베이스 테이블 정리
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.drop_all)
+
 
 app = FastAPI(
     debug=True,
@@ -18,19 +33,20 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     middleware=get_middleware(),
+    lifespan=lifespan
 )
 
 # IoC 컨테이너 설정
 container = Container()
-container.wire(packages=["src.member"])
-app.container = container
+container.wire(packages=["member", "post"])
 
 # 라우터
 app.include_router(member_router)
+app.include_router(post_router)
 
 # 예외 처리 핸들러
-app.add_exception_handler(RequestValidationError, validation_exception_handler)
-app.add_exception_handler(HTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler) # type: ignore
+app.add_exception_handler(HTTPException, http_exception_handler) # type: ignore
 app.add_exception_handler(Exception, internal_server_error_handler)
 
 

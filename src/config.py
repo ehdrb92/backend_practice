@@ -4,14 +4,14 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    POSTGRESQL_USER: str
-    POSTGRESQL_PASSWORD: str
-    POSTGRESQL_DB: str
-    POSTGRESQL_HOST: str
-    POSTGRESQL_PORT: int
+    POSTGRESQL_USER: str = "dev"
+    POSTGRESQL_PASSWORD: str = "dev"
+    POSTGRESQL_DB: str = "dev"
+    POSTGRESQL_HOST: str = "localhost"
+    POSTGRESQL_PORT: int = 5432
 
-    SECRET_KEY: str
-    ALGORITHM: str
+    SECRET_KEY: str = "secret"
+    ALGORITHM: str = "algorithm"
 
     class Config:
         env_file = ".env"

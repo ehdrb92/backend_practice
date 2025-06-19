@@ -6,7 +6,7 @@ API 서버 개발, 데이터베이스, 도커, 쿠버네티스 등 백엔드 개
 
 - FastAPI
 - PostgreSQL
-    `$ docker run --name dev-db -p 5432:5432 -e POSTGRES_USER=dev -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=dev -d postgres`
+    `$ docker run --name dev-db -p 5432:5432 -e POSTGRES_USER=dev -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=dev -d postgres:14.17`
 - Alembic
   - `alembic revision --autogenerate -m "{message}"`
   - `alembic upgrade head`

@@ -3,13 +3,17 @@ from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.member.schemas import JoinMemberRequest, UpdateMemberRequest
-from src.member.models import Member
+from member.schemas import SaveMember
+from member.models.member import Member
 
 
 class IMemberRepository(ABC):
     @abstractmethod
-    async def save(self, session: AsyncSession, member: JoinMemberRequest) -> Member:
+    async def save(
+        self,
+        session: AsyncSession,
+        save_member: SaveMember,
+    ) -> Member:
         pass
 
     @abstractmethod
@@ -25,9 +29,5 @@ class IMemberRepository(ABC):
         pass
 
     @abstractmethod
-    async def update(self, session: AsyncSession, member: UpdateMemberRequest):
-        pass
-
-    @abstractmethod
-    async def delete(self, session: AsyncSession, id: str) -> None:
+    async def delete(self, session: AsyncSession, member: Member) -> None:
         pass
