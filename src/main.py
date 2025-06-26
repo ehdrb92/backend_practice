@@ -9,7 +9,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 import uvicorn
 
+from auth.router import router as auth_router
 from member.router import router as member_router
+from post.router import router as post_router
+from comment.router import router as comment_router
 from middlewares import get_middleware
 from database import engine, Base
 from exception_handler import (
@@ -24,8 +27,8 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     yield
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.drop_all)
 
 
 app = FastAPI(
@@ -38,7 +41,10 @@ app = FastAPI(
 )
 
 # 라우터
+app.include_router(auth_router)
 app.include_router(member_router)
+app.include_router(post_router)
+app.include_router(comment_router)
 
 # 예외 처리 핸들러
 app.add_exception_handler(RequestValidationError, validation_exception_handler)  # type: ignore

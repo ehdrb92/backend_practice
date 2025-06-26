@@ -7,7 +7,7 @@ from sqlalchemy.engine import ScalarResult
 from ulid import ULID
 
 from post.schemas import CreatePostRequest, UpdatePostRequest
-from post.models import Post, PostLike
+from models import Post, PostLike
 
 
 async def create(db_session: AsyncSession, create_post_request: CreatePostRequest):

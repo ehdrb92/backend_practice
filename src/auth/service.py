@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from jose import jwt, JWTError
 
-from member.models import Member
+from models import Member
 from config import get_settings
 
 settings = get_settings()

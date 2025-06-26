@@ -27,19 +27,12 @@ async def join(
     return await create(db_session, join_request)
 
 
-@router.get("/member/{id}", response_model=GetMemberResponse, status_code=status.HTTP_200_OK)
+@router.get("/member", response_model=GetMemberResponse, status_code=status.HTTP_200_OK)
 async def get_member(
     db_session: Annotated[AsyncSession, Depends(get_db_session)],
     current_user: Annotated[TokenPayload, Depends(get_current_user)],
-    id: str,
 ):
-    if current_user.sub != id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=[{"message": "권한이 없습니다."}],
-        )
-
-    return await get(db_session, id)
+    return await get(db_session, current_user.sub)
 
 
 @router.get(
@@ -51,6 +44,8 @@ async def get_members(
     db_session: Annotated[AsyncSession, Depends(get_db_session)],
     current_user: Annotated[TokenPayload, Depends(get_current_user)],
 ):
+    print(current_user.role)
+    print(MemberRole.ADMIN)
     if current_user.role != MemberRole.ADMIN:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -61,38 +56,24 @@ async def get_members(
 
 
 @router.patch(
-    "/member/{id}",
+    "/member",
     response_model=UpdateMemberResponse,
     status_code=status.HTTP_200_OK,
 )
 async def update_member(
     db_session: Annotated[AsyncSession, Depends(get_db_session)],
     current_user: Annotated[TokenPayload, Depends(get_current_user)],
-    id: str,
     update_member_request: UpdateMemberRequest,
 ):
-    if current_user.sub != id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=[{"message": "권한이 없습니다."}],
-        )
-
-    return await update(db_session, id, update_member_request)
+    return await update(db_session, current_user.sub, update_member_request)
 
 
 @router.delete(
-    "/member/{member_id}",
+    "/member",
     status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_member(
     db_session: Annotated[AsyncSession, Depends(get_db_session)],
     current_user: Annotated[TokenPayload, Depends(get_current_user)],
-    id: str,
 ):
-    if current_user.sub != id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail=[{"message": "권한이 없습니다."}],
-        )
-
-    await delete(db_session, id)
+    await delete(db_session, current_user.sub)

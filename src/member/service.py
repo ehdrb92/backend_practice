@@ -8,7 +8,7 @@ from sqlalchemy.engine import ScalarResult
 
 from auth.service import hash_password
 from tasks import send_welcome_email_task
-from member.models import Member
+from models import Member
 from member.schemas import JoinRequest, UpdateMemberRequest
 
 

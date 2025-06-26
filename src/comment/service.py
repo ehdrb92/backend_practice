@@ -7,7 +7,7 @@ from sqlalchemy.engine import ScalarResult
 from ulid import ULID
 
 from comment.schemas import CreateCommentRequest, UpdateCommentRequest
-from comment.models import Comment, CommentLike
+from models import Comment, CommentLike
 
 
 async def create(db_session: AsyncSession, create_comment_request: CreateCommentRequest) -> Comment:
