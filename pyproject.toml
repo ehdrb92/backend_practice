@@ -26,9 +26,22 @@ dependencies = [
     "pytest-asyncio (>=1.0.0,<2.0.0)",
     "pytest-mock (>=3.14.1,<4.0.0)",
     "python-ulid (>=3.0.0,<4.0.0)",
+    "celery (>=5.5.3,<6.0.0)",
+    "redis (>=6.2.0,<7.0.0)",
+    "freezegun (>=1.5.2,<2.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

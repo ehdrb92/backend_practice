@@ -2,13 +2,14 @@ from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
-# TODO: 각 예외 처리에 대한 로그 수집
-
 
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        content={"message": "요청 데이터 타입 혹은 키 값이 올바르지 않습니다. 자세한 사항은 detail 필드를 참고해주세요.", "detail": exc.errors()},
+        content={
+            "message": "요청 데이터 타입 혹은 키 값이 올바르지 않습니다. 자세한 사항은 detail 필드를 참고해주세요.",
+            "detail": exc.errors(),
+        },
     )
 
 

@@ -1,9 +1,8 @@
 from datetime import datetime
-from uuid import uuid4
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr
 
-from member.enums.member_role import MemberRole
+from member.enums import MemberRole
 
 
 class JoinRequest(BaseModel):
@@ -13,12 +12,19 @@ class JoinRequest(BaseModel):
     password: str
     address: str
     name: str
-    role: MemberRole | None
+    role: MemberRole | None = None
+
 
 class JoinResponse(BaseModel):
     """회원가입 응답 구조"""
 
     id: str
+
+
+class LoginResponse(BaseModel):
+    """로그인 응답 구조"""
+
+    token: str
 
 
 class UpdateMemberRequest(BaseModel):
@@ -44,25 +50,3 @@ class GetMemberResponse(BaseModel):
     name: str
     role: MemberRole
     created_at: datetime
-
-
-class TokenPayload(BaseModel):
-    """토큰 페이로드 구조"""
-
-    sub: str
-    role: MemberRole
-    exp: datetime
-    iat: datetime
-    jti: str
-
-class SaveMember(BaseModel):
-    """회원 저장 구조"""
-
-    id: str = Field(default_factory=lambda: str(uuid4()))
-    email: EmailStr
-    password: str
-    address: str
-    name: str
-    role: MemberRole = MemberRole.USER
-    created_at: datetime = Field(default_factory=lambda: datetime.now())
-    is_deleted: bool = False

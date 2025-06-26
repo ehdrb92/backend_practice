@@ -17,7 +17,6 @@ class Post(Base):
     like_count: 좋아요 수
     created_at: 생성일시
     updated_at: 수정일시
-    is_deleted: 논리적 삭제 여부
     """
 
     __tablename__ = "post"
@@ -29,7 +28,20 @@ class Post(Base):
     like_count: Mapped[int] = mapped_column(nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(nullable=False)
     updated_at: Mapped[datetime] = mapped_column(nullable=False)
-    is_deleted: Mapped[bool] = mapped_column(nullable=False)  # 논리적 삭제 여부
 
     member = relationship("Member", back_populates="posts")
     comments = relationship("Comment", back_populates="post", cascade="all, delete")
+
+
+class PostLike(Base):
+    """
+    게시물 좋아요 기록 테이블
+
+    post_id: 좋아요 누른 게시물
+    member_id: 좋아요 누른 사용자
+    """
+
+    __tablename__ = "post_like"
+
+    post_id: Mapped[str] = mapped_column(String(26), ForeignKey("post.id"), primary_key=True)
+    member_id: Mapped[str] = mapped_column(String(26), ForeignKey("member.id"), primary_key=True)

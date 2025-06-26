@@ -4,14 +4,23 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    POSTGRESQL_USER: str = "dev"
-    POSTGRESQL_PASSWORD: str = "dev"
-    POSTGRESQL_DB: str = "dev"
-    POSTGRESQL_HOST: str = "localhost"
-    POSTGRESQL_PORT: int = 5432
+    POSTGRESQL_USER: str
+    POSTGRESQL_PASSWORD: str
+    POSTGRESQL_DB: str
+    POSTGRESQL_HOST: str
+    POSTGRESQL_PORT: int
 
-    SECRET_KEY: str = "secret"
-    ALGORITHM: str = "algorithm"
+    SECRET_KEY: str
+    ALGORITHM: str
+
+    REDIS_HOST: str
+    REDIS_PORT: int
+
+    TEST_POSTGRESQL_USER: str
+    TEST_POSTGRESQL_PASSWORD: str
+    TEST_POSTGRESQL_DB: str
+    TEST_POSTGRESQL_HOST: str
+    TEST_POSTGRESQL_PORT: str
 
     class Config:
         env_file = ".env"
@@ -19,4 +28,4 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings():
-    return Settings()
+    return Settings()  # type: ignore
