@@ -1,12 +1,8 @@
-import sys
-from pathlib import Path
-
-sys.path.append(str(Path(__file__).parent.parent))
-
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 import uvicorn
 
 from auth.router import router as auth_router
@@ -24,8 +20,8 @@ from exception_handler import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    # async with engine.begin() as conn:
+    #     await conn.run_sync(Base.metadata.create_all)
     yield
     # async with engine.begin() as conn:
     #     await conn.run_sync(Base.metadata.drop_all)
@@ -40,6 +36,19 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+@app.middleware("http")
+async def unknown_exception_middleware(request: Request, call_next):
+    try:
+        response = await call_next(request)
+    except Exception:
+        return JSONResponse(
+            content={"detail": [{"message": "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."}]},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+    return response
+
+
 # 라우터
 app.include_router(auth_router)
 app.include_router(member_router)
@@ -49,7 +58,6 @@ app.include_router(comment_router)
 # 예외 처리 핸들러
 app.add_exception_handler(RequestValidationError, validation_exception_handler)  # type: ignore
 app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore
-app.add_exception_handler(Exception, internal_server_error_handler)
 
 
 if __name__ == "__main__":
