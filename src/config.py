@@ -16,12 +16,6 @@ class Settings(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: int
 
-    TEST_POSTGRESQL_USER: str
-    TEST_POSTGRESQL_PASSWORD: str
-    TEST_POSTGRESQL_DB: str
-    TEST_POSTGRESQL_HOST: str
-    TEST_POSTGRESQL_PORT: str
-
     class Config:
         env_file = ".env"
 

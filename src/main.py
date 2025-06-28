@@ -1,5 +1,3 @@
-from contextlib import asynccontextmanager
-
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -10,21 +8,10 @@ from member.router import router as member_router
 from post.router import router as post_router
 from comment.router import router as comment_router
 from middlewares import get_middleware
-from database import engine, Base
 from exception_handler import (
     validation_exception_handler,
     http_exception_handler,
-    internal_server_error_handler,
 )
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # async with engine.begin() as conn:
-    #     await conn.run_sync(Base.metadata.create_all)
-    yield
-    # async with engine.begin() as conn:
-    #     await conn.run_sync(Base.metadata.drop_all)
 
 
 app = FastAPI(
@@ -33,7 +20,7 @@ app = FastAPI(
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     middleware=get_middleware(),
-    lifespan=lifespan,
+    lifespan=None,
 )
 
 
@@ -42,6 +29,9 @@ async def unknown_exception_middleware(request: Request, call_next):
     try:
         response = await call_next(request)
     except Exception:
+        import traceback
+
+        traceback.print_exc()
         return JSONResponse(
             content={"detail": [{"message": "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."}]},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

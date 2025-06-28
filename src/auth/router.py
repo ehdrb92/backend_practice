@@ -17,6 +17,5 @@ async def login(
     db_session: Annotated[AsyncSession, Depends(get_db_session)],
     oauth2_request: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
-    raise NameError
     token = await authenticate(db_session, oauth2_request.username, oauth2_request.password)
     return JSONResponse(content={"token": token})
