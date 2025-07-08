@@ -45,6 +45,15 @@ app.include_router(member_router)
 app.include_router(post_router)
 app.include_router(comment_router)
 
+
+@app.get("/v1/health")
+def health():
+    from tasks import test_job
+
+    test_job.delay()
+    return JSONResponse(content={"message": "ok"}, status_code=status.HTTP_200_OK)
+
+
 # 예외 처리 핸들러
 app.add_exception_handler(RequestValidationError, validation_exception_handler)  # type: ignore
 app.add_exception_handler(HTTPException, http_exception_handler)  # type: ignore
